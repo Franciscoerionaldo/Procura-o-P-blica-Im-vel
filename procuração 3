@@ -1,0 +1,62 @@
+import PyPDF2
+import re
+
+# Função para extrair texto do PDF
+def extrair_texto_pdf(pdf_file):
+    with open(pdf_file, 'rb') as f:
+        reader = PyPDF2.PdfReader(f)
+        texto_pdf = ""
+        for page in reader.pages:
+            texto_pdf += page.extract_text() or ''
+    return texto_pdf
+
+# Função para extrair campo usando regex
+def extrair_campo(padrao, texto):
+    resultado = re.search(padrao, texto, re.IGNORECASE)
+    return resultado.group(1).strip() if resultado else None
+
+# Lista de campos na ordem dos ###### do modelo
+campos_ordem = [
+    r'Nome completo: (.+)',        # 1
+    r'Nacionalidade: (.+)',        # 2
+    r'Data de nascimento: (.+)',   # 3
+    r'Estado civil: (.+)',         # 4
+    r'Regime de bens: (.+)',       # 5
+    r'Profissão: (.+)',            # 6
+    r'Filho de (.+) e',            # 7
+    r'e de (.+), portador',        # 8
+    r'identificação nº ([\d\w.-]+)', # 9
+    r'órgão expedidor (.+?),',     # 10
+    r'UF órgão expedidor (.+?),',  # 11
+    r'data da emissão (.+?),',     # 12
+    r'CPF/MF nº ([\d\.-]+)',       # 13
+    r'residente e domiciliado à (.+?), nº',  # 14
+    r'nº\. (.+?), bairro',         # 15
+    r'bairro (.+?), cidade',       # 16
+    r'cidade (.+?), endereço',     # 17
+    r'endereço eletrônico (.+?)\.', # 18
+    # Acrescente os regex para cada ###### na ordem do seu modelo
+    # Continue para cada "######" do seu texto
+]
+
+# Extrai o texto do PDF
+pdf_file = 'SEU_ARQUIVO.pdf'  # Coloque o nome do PDF aqui
+texto_pdf = extrair_texto_pdf(pdf_file)
+
+# Extrai os campos (resulta numa lista)
+valores_campos = []
+for padrao in campos_ordem:
+    valor = extrair_campo(padrao, texto_pdf)
+    valores_campos.append(valor)
+
+# Seu modelo, onde cada "######" será substituído na ordem
+modelo = '''S  A  I  B  A M  quantos este Público Instrumento de Procuração bastante virem que, <<DIAEX>> do mês de <<MESEX.NUM>>, do Ano do Nascimento do Nosso Senhor Jesus Cristo, de <<ANOEX>> nesta cidade de Macapá, Capital do Estado do Amapá, República Federativa do Brasil, neste Tabelionato, 1º Ofício de Notas, Registros Públicos e demais anexos da comarca de Macapá-AP, na Rua Tiradentes, 876, Centro, perante mim, Escrevente, compareceu como outorgante: Nome completo: ######, nacionalidade ######, data de nascimento ######, declarou ser estado civil ######, sob o regime ######, com ######, profissão ######, filho de ###### e de ######, portador do documento de identificação nº ######, órgão expedidor ######, UF órgão expedidor ######, data da emissão ######, inscrito no CPF/MF nº ######, residente e domiciliado à ######, nº. ######, bairro ######, cidade ######, endereço eletrônico ######. O(a/s) presente(s) reconhecido(a/s) como o(a/s) próprio(a/s) por mim através dos documentos de identidade ora exibidos, cujas cópias autenticadas ficam devidamente arquivadas para fins das exigências do Provimento nº. 460/2024 - Corregedoria de Justiça - TJAP. ...
+'''
+
+# Substitui os ###### pelos valores, mantendo ###### quando não encontrar
+for valor in valores_campos:
+    if valor:
+        modelo = modelo.replace('######', valor, 1)
+    # Se não encontrar, não faz nada: ###### fica no texto
+
+print(modelo)
