@@ -1,0 +1,32 @@
+import PyPDF2
+
+# 1. Lê o PDF enviado
+pdf_file = 'SEU_ARQUIVO.pdf'  # Troco pelo nome do seu PDF
+
+with open(pdf_file, 'rb') as f:
+    reader = PyPDF2.PdfReader(f)
+    texto_pdf = ""
+    for page in reader.pages:
+        texto_pdf += page.extract_text()
+
+# 2. Aqui vou identificar cada informação necessária no texto do PDF.
+# Exemplo fictício (adapto conforme o seu PDF):
+import re
+
+nome = re.search(r'Nome completo: (.+)', texto_pdf)
+nome = nome.group(1) if nome else 'NÃO ENCONTRADO'
+
+# Repito isso para cada campo...
+
+# 3. Preencho o texto-modelo trocando cada marcador pelo dado extraído
+modelo = '''S  A  I  B  A M  quantos este Público Instrumento de Procuração bastante virem que, <<DIAEX>> do mês de <<MESEX.NUM>>, do Ano do Nascimento do Nosso Senhor Jesus Cristo, de <<ANOEX>> nesta cidade de Macapá, Capital do Estado do Amapá, República Federativa do Brasil, neste Tabelionato, 1º Ofício de Notas, Registros Públicos e demais anexos da comarca de Macapá-AP, na Rua Tiradentes, 876, Centro, perante mim, Escrevente, compareceu como outorgante: Nome completo: ######, nacionalidade ######, data de nascimento ######, declarou ser estado civil ######, sob o regime ######, com ######, profissão ######, filho de ###### e de ######, portador do documento de identificação nº ######, órgão expedidor ######, UF órgão expedidor ######, data da emissão ######, inscrito no CPF/MF nº ######, residente e domiciliado à ######, nº. ######, bairro ######, cidade ######, endereço eletrônico ######. O(a/s) presente(s) reconhecido(a/s) como o(a/s) próprio(a/s) por mim através dos documentos de identidade ora exibidos, cujas cópias autenticadas ficam devidamente arquivadas para fins das exigências do Provimento nº. 460/2024 - Corregedoria de Justiça - TJAP. Parte(s) maior(es) e capaz(es), livre(s) de qualquer coação, sugestão ou induzimento, do que dou fé. Pelo(a/s) outorgante(s) me foi dito que, por este público instrumento e na melhor forma de direito, nomeia(m) e constitui(em) seu/sua bastante procurador(a/s) Nome completo: ######, nacionalidade ######, data de nascimento ######, declarou ser estado civil ######, sob o regime ######, com ######, profissão ######, filho de ###### e de ######, portador do documento de identificação nº ######, órgão expedidor ######, UF órgão expedidor ######, data da emissão ######, inscrito no CPF/MF nº ######, residente e domiciliado à ######, nº. ######, bairro ######, cidade ######, endereço eletrônico ######. A quem confere poderes para representá-lo(a/s) junto às Repartições Públicas Federais, Estaduais, Municipais, Autárquicas, Cartórios de Notas e Registros de Imóveis, Prefeitura Municipal, Companhia de Eletricidade do Estado, Companhia de Água e Esgoto, INCRA, Instituto do Meio Ambiente e de Ordenamento - IMAP, Instituto de Desenvolvimento Rural - RURAP, Instituto de Terras do Estado do Amapá - AMAPÁ TERRAS, Secretaria de Estado do Meio Ambiente, SEMHOU - Secretaria Municipal de Habitação e Ordenamento Urbano, IBAMA, Secretaria Municipal de Desenvolvimento Urbano e Habitacional/SEMDUH, financiadoras, imobiliárias, e onde mais se fizer necessário, podendo para tanto resolver todos e quaisquer assuntos relacionados com o seguinte imóvel: ######, podendo assinar o que preciso for, escrituras de compra e venda, inclusive de rerratificações, passar recibos, prestar declarações, dar quitação, vender, prometer vender ou de qualquer forma alienar o imóvel descrito na presente procuração, solicitar, apresentar e fazer retiradas de documentos, legalizar, regularizar, fazer transferência para seu próprio nome ou a quem lhe convier ou expressamente indicar, transmitir direito, domínio, ação e posse, responder pela evicção de direito, pagar taxas, impostos, estabelecer cláusulas, condições, preços, receber sinal e princípio de pagamentos, parcela ou total, requerer, promover, enfim, praticar todos os atos necessários ao fiel cumprimento do presente mandato, inclusive o de autorizar a transcrição do negócio referente a venda do imóvel acima descrito junto ao competente Registro Imobiliário. Podendo / Vedado substabelecer. Ainda, pelo(a/s) outorgante(s) me foi dito que assume integral responsabilidade pelas informações por ele(a/s) fornecidas, isentando o Oficial desta Serventia da responsabilidade de eventuais erros materiais porventura existentes. Foi realizada consulta a Central de Indisponibilidade de Bens, em nome dou outorgante ######, em data de hoje (######), com resultado NEGATIVO, com código HASH: ######. Certifico que a qualificação do(a/s) procurador(a/s) e a descrição do objeto do presente mandato foram fornecidos por declaração do(a/s) outorgante(s), o(a/s) qual(is) se responsabiliza(m) civil e criminalmente por sua veracidade, devendo a prova destas declarações serem exigidas diretamente pelos órgãos e pessoas a quem for dar cumprimento ao referido mandato, isentando o oficial desta Serventia da responsabilidade de eventuais erros materiais porventura existentes. ASSIM  o disse(ram), do que dou fé, e me pediu(ram) este Instrumento, que lhe(s) li, aceitou(ram) e assinou(ram), dispensadas as testemunhas ex vi, do Art. 215, parágrafo 5º do C.C.B. EU, <<ESCREVLAVRA>>, <<FUNCAOLAVRA>>, digitei e colhi a manifestação da vontade e assinatura(s). E, EU, _______________________, (<<ESCREVSUBSCREVEU>>), <<FUNCAOSUBSCREVEU>>, Conferi, dou fé e assino. Macapá-AP, <<DATAHOJEEXTENSO>>. (ass.) Outorgante(s): <<OUTORGANTES>>. Trasladada na mesma data em Macapá-AP. Eu, <<ESCREVSUBSCREVEU>>, <<FUNCAOSUBSCREVEU>>, Certifico, Subscrevo, dou fé e assino em público e raso. Neste instrumento foi utilizado o Selo eletrônico nº. ######, consulte a validade deste selo no site: extrajudicial.tjap.jus.br. Emolumentos R$ 87,80; TSNR R$ 4,39; Total R$ 92,19, conforme código 209, da Tabela de Emolumentos de 2025 (Provimento 0466/2024 – CGJ) e Lei Estadual nº 2.130/2016.
+
+______________________________________ 
+(<<OUTORGANTES>> - Outorgante)
+
+______________________________________ 
+(<<OUTORGANTES>> - Outorgante)'''
+modelo = modelo.replace('######', nome, 1)  # Troca o primeiro campo
+# e assim por diante para cada campo
+
+print(modelo)
